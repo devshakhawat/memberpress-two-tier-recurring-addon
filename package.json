@@ -1,0 +1,33 @@
+{
+  "name": "skt-memberpress",
+  "version": "1.0.0",
+  "description": "skt memberpress",
+  "main": "index.js",
+  "scripts": {
+    "start": "mix watch",
+    "dev": "mix",
+    "development": "mix",
+    "watch": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000",
+    "hot": "mix watch --hot",
+    "production": "mix --production",
+    "prod": "mix --production",
+    "zip": "./build.sh"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "cross-env": "^7.0.3",
+    "laravel-mix": "^6.0.39",
+    "postcss": "^8.4.5",
+    "sass": "^1.48.0",
+    "sass-loader": "^12.4.0",
+    "wp-pot": "^1.9.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devshakhawat/skt-composite-products.git"
+  },
+  "author": "shakhawat",
+  "license": "ISC"
+}
+

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<ruleset name="Custom WordPress Coding Standard">
+    <description>SKT custom coding standards</description>
+    <!-- Include WordPress Coding Standard -->
+    <rule ref="WordPress"/>
+
+      <!-- Exclude node and composer folders -->
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>node_modules/*</exclude-pattern>
+    <exclude-pattern>*/data/*</exclude-pattern>
+
+    <!-- Only check php code, linters are checking js and css -->
+    <arg name="extensions" value="php"/>
+
+    <!-- Define default report type -->
+    <arg name="report" value="summary"/>
+
+    <!-- Enable colors in report -->
+    <arg name="colors"/>
+
+    <!-- Allow short array syntax -->
+    <exclude name="Generic.Arrays.DisallowLongArraySyntax"/>
+    <exclude name="WordPress.NamingConventions.PrefixAllClasses.NonPrefixedClassFound"/>
+
+</ruleset>
