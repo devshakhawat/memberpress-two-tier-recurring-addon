@@ -32,8 +32,6 @@ class Scripts {
 	 */
 	public function admin_enqueue_scripts( $hook ) {
 
-		pretty_log('admin_enqueue_scripts');
-
 		// Styles.
 		wp_enqueue_style( 'skt_admin', SKT_PLUGIN_URI . 'assets/admin/css/admin.min.css', array(), SKT_VERSION );
 
