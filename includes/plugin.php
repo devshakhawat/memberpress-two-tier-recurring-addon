@@ -47,10 +47,9 @@ class Plugin {
 
 		$this->hooks         = new Hooks();
 		$this->scripts       = new Scripts();
-		$this->generate_css  = new Generate_CSS();
 
 		new Template_Loader();
-		new Add_tt_fields();
+		new Save_tt_fields();
 	}
 }
 

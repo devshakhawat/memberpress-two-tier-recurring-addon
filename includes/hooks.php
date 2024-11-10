@@ -1,9 +1,10 @@
 <?php // phpcs:ignore
 namespace TTRECURRING;
 
+use function ElementorDeps\DI\get;
+
 // if direct access than exit the file.
 defined( 'ABSPATH' ) || exit;
-
 
 /**
  * Class Hooks
@@ -18,35 +19,55 @@ class Hooks {
 	 * Constructor for the Hooks class.
 	 */
 	public function __construct() {
-		add_filter( 'mepr-admin-memberships-columns', [ $this, 'membership_columns' ] );
-		add_action( 'manage_pages_custom_column', [ $this, 'custom_columns' ], 10, 2 );
-
-		add_filter( 'mepr-process-subscription-txn', [ $this, 'test' ], 10, 1 );
+		add_filter( 'mepr-admin-memberships-columns', array( $this, 'membership_columns' ) );
+		add_action( 'manage_pages_custom_column', array( $this, 'custom_columns' ), 10, 2 );
+		add_filter( 'mepr_view_get_string_/admin/products/form', array( $this, 'get_membership_terms' ) );
 	}
 
 	public function membership_columns( $columns ) {
 		unset( $columns['url'] );
-		$columns['tt_payment']   = esc_html__( 'Recurring from 2nd Year', 'ttrecurring' );
-		$columns['url'] 		 = esc_html__( 'URL', 'ttrecurring' );
+		$columns['tt_payment'] = esc_html__( 'Recurring from 2nd Year', 'ttrecurring' );
+		$columns['url']        = esc_html__( 'URL', 'ttrecurring' );
 
-		return $columns;		
-	} 
+		return $columns;
+	}
 
 	public function custom_columns( $column, $post_id ) {
 
-		if(  $column == 'tt_payment' ) {
+		if ( $column == 'tt_payment' ) {
 			$tt_payment = get_post_meta( $post_id, 'mepr_tt_product_price', true );
 			echo esc_html( $tt_payment );
 		}
+	}
+
+	public function get_membership_terms( $views ) {
+
+        $tt_payment  = get_post_meta( get_the_ID(), 'tt_payment', true );
+        $post_meta   = get_post_meta( get_the_ID(), 'mepr_tt_product_price', true );
 		
-	} 
-	
-	public function test( $hello ) {
+		ob_start();
+		?>
 
-		pretty_log( $hello, 'hello' );
+		<div class="mp_second_year inside">
+			<p>
+				<input type="checkbox" id="tt_payment" name="tt_payment" <?php checked( $tt_payment, true ); ?> >
+				<label for="tt_payment"><strong><?php esc_html_e( 'Enable Two Tier Payment', 'ttrecurring' ); ?></strong></label>
+			</p>
+			<div class="second_year_price">
+				<p>
+					<strong><?php esc_html__('Second Year Price( $ ):', 'ttrecurring'); ?></strong>
+				</p>
+				<p>
+					<input name="mepr_tt_product_price" id="mepr_tt_product_price" type="text" value="<?php echo esc_attr( $post_meta ); ?>">
+				</p>
+			</div>
+		</div>
 
-		
-	} 
+		<?php
 
+		$views .= ob_get_clean();
 
+		return $views;
+
+	}
 }

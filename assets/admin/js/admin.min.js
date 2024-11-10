@@ -1,26 +1,32 @@
-// jQuery(function($){
+jQuery(function($){
 
-//     let periodType = $('#_mepr_product_period_type-presets').val();
-//     add_field( periodType );
-//     $('#_mepr_product_period_type-presets').on('change', function() {
-       
-//         periodType = $(this).val();
+    let periodType = $('#_mepr_product_period_type-presets').val();
+   
 
-//         if(periodType == 'yearly') {
-//             add_field( periodType );
-//         } else {
-//             $( '#mepr-recurring-options' ).find( '.mp_second_year' ).remove();
-//         }
-        
-//     });
+    if( $('#tt_payment').is(':checked') ) {
+        $('.second_year_price').show();
+    } else {
+        $('.second_year_price').hide();
+    }
 
-//     function add_field( periodType ) {
-
-//         if (periodType == 'yearly') {
-            
-//             $( '#mepr-recurring-options' ).append( '<div class="mp_second_year"><p><strong>Second Year Price ($):</strong></p><p><input name="mepr_tt_product_price" id="mepr_tt_product_price" type="text" value=""></p></div>' );
-            
-//         }
-//     }
+    $( '#tt_payment' ).on( 'change', function() {
+        if( $(this).is(':checked') ) {
+            $('.second_year_price').show();                        
+        } else {
+            $('.second_year_price').hide();                        
+        }
+    });
     
-// });
+    $('#_mepr_product_period_type-presets').on('change', function() {
+    
+        periodType = $(this).val();
+
+        if(periodType == 'yearly') {
+            $( '#mepr-recurring-options' ).find( '.mp_second_year' ).hide();
+        } else {
+            $( '#mepr-recurring-options' ).find( '.mp_second_year' ).hide();
+        }
+        
+    });
+
+});
