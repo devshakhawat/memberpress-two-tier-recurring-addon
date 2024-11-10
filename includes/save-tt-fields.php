@@ -11,8 +11,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class Save_tt_fields {
 
-	public function __construct() {
-        
+	public function __construct() {        
         add_action( 'save_post', array( $this, 'save_tt_pricing_field' ) );
 	}
 

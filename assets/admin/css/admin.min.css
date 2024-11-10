@@ -1,1 +1,6 @@
-
+.mp_second_year {
+  display: none;
+}
+.mp_second_year .second_year_price {
+  display: none;
+}

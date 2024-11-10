@@ -42,24 +42,20 @@ class Hooks {
 
 	public function get_membership_terms( $views ) {
 
-        $tt_payment  = get_post_meta( get_the_ID(), 'tt_payment', true );
-        $post_meta   = get_post_meta( get_the_ID(), 'mepr_tt_product_price', true );
-		
+		$tt_payment = get_post_meta( get_the_ID(), 'tt_payment', true );
+		$post_meta  = get_post_meta( get_the_ID(), 'mepr_tt_product_price', true );
+
 		ob_start();
 		?>
 
 		<div class="mp_second_year inside">
-			<p>
+			<div class="tt_switcher">
 				<input type="checkbox" id="tt_payment" name="tt_payment" <?php checked( $tt_payment, true ); ?> >
 				<label for="tt_payment"><strong><?php esc_html_e( 'Enable Two Tier Payment', 'ttrecurring' ); ?></strong></label>
-			</p>
-			<div class="second_year_price">
-				<p>
-					<strong><?php esc_html__('Second Year Price( $ ):', 'ttrecurring'); ?></strong>
-				</p>
-				<p>
-					<input name="mepr_tt_product_price" id="mepr_tt_product_price" type="text" value="<?php echo esc_attr( $post_meta ); ?>">
-				</p>
+			</div><br>
+			<div class="second_year_price">				
+				<strong><?php esc_html__( 'Second Year Price( $ ):', 'ttrecurring' ); ?></strong>			
+				<input name="mepr_tt_product_price" id="mepr_tt_product_price" type="text" value="<?php echo esc_attr( $post_meta ); ?>">
 			</div>
 		</div>
 
@@ -68,6 +64,5 @@ class Hooks {
 		$views .= ob_get_clean();
 
 		return $views;
-
 	}
 }
