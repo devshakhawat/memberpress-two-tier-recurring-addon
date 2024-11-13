@@ -32,24 +32,17 @@ class Plugin {
 		return self::$instance;
 	}
 
-	public $hooks; // phpcs:ignore
-	public $scripts; // phpcs:ignore
-	public $generate_css; // phpcs:ignore
-	public $video_btn; // phpcs:ignore
-	public $admin_menu; // phpcs:ignore
-	public $save_video; // phpcs:ignore
-	public $display_video; // phpcs:ignore
-
 	/**
 	 * Constructor for the class.
 	 */
 	public function __construct() {
 
-		$this->hooks         = new Hooks();
-		$this->scripts       = new Scripts();
-
+		new Hooks();
+		new Scripts();
 		new Template_Loader();
-		new Save_tt_fields();
+		new Meta_Fields();
+		new Manage_Columns();
+		new Modify_Stripe_Subs();
 	}
 }
 
