@@ -43,6 +43,7 @@ class Plugin {
 		new Meta_Fields();
 		new Manage_Columns();
 		new Modify_Stripe_Subs();
+		new Modify_Paypal_Subs();
 	}
 }
 

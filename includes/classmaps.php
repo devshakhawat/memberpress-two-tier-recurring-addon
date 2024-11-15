@@ -14,4 +14,5 @@ return array(
 	'Update_Recurrance'        => 'includes/update-recurrance.php',
 	'Manage_Columns'           => 'includes/manage-columns.php',
 	'Modify_Stripe_Subs'       => 'includes/modify-stripe-subs.php',
+	'Modify_Paypal_Subs'       => 'includes/modify-paypal-subs.php',
 );
