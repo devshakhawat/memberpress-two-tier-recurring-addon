@@ -18,8 +18,6 @@ class Modify_Stripe_Subs {
 			return $args;
 		}
 
-		pretty_log( $args, 'args' );
-
 		$product_id    = $args['metadata']['memberpress_product_id'] ?? '';
 		$renewal_price = get_post_meta( $product_id, 'mepr_tt_product_price', true );
 
