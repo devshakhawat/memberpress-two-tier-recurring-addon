@@ -1,104 +1,67 @@
 <?php // phpcs:ignore
 namespace TTRECURRING;
 
-use MeprStripeGateway;
-
 // if direct access than exit the file.
 defined( 'ABSPATH' ) || exit;
 
-class Modify_Stripe_Subs extends MeprStripeGateway {
+class Modify_Stripe_Subs {
 
 	public function __construct() {
 
-		// add_filter( 'mepr_stripe_request_args', array( $this, 'modify_stripe_args' ) );
-		// add_filter( 'mepr_stripe_request', array( $this, 'modify_stripe_body' ) );
-		// add_filter( 'mepr_stripe_subscription_endpoint', array( $this, 'modify_stripe_endpoint' ), 10, 2 );
+		// add_filter( 'mepr_stripe_subscription_args', array( $this, 'modify_stripe_args' ) );
+		add_filter( 'mepr_stripe_subscription_endpoint', array( $this, 'modify_stripe_endpoint' ), 10, 2 );
 	}
 
-	// public function modify_stripe_args( $args ) {
+	public function modify_stripe_args( $args, $renewal_plan ) {
 
-	// if( empty( $args['items'] ) ) {
-	// return $args;
-	// }
-
-	// $product_id     = $args['metadata']['memberpress_product_id'];
-	// $renewal_price  = get_post_meta( $product_id, 'mepr_tt_product_price', true );
-
-	// if( empty( $renewal_price ) ) {
-	// return $args;
-	// }
-
-	// $data   = $this->get_args_data(  $renewal_price, 'usd', 'year' );
-	// $price1 = $this->send_stripe_request('prices', $data, 'post');
-	// $price2 = $this->send_stripe_request('prices', $data, 'post');
-
-
-	// $args['items'] = [
-	// 'phases' => [
-	// [
-	// 'plans' => [
-	// [
-	// 'price' => $price1,
-	// 'quantity' => 1,
-	// ]
-	// ],
-	// 'end_date' => strtotime('+1 year')
-	// ],
-	// [
-	// 'plans' => [
-	// [
-	// 'price' => $price2,
-	// 'quantity' => 1,
-	// ],
-	// ]
-	// ],
-	// ],
-	// ];
-
-
-	// return $args;
-	// }
-
-	public function modify_stripe_body( $args ) {
-
-		$body = $args['body'];
-
-		if ( empty( $body ) ) {
+		if ( empty( $args['items'] || $args['metadata'] ) ) {
 			return $args;
 		}
 
-        pretty_log($args, 'args');
 
-		$product_id    = $args['metadata']['memberpress_product_id'];
+		$product_id    = $args['metadata']['memberpress_product_id'] ?? '';
 		$renewal_price = get_post_meta( $product_id, 'mepr_tt_product_price', true );
 
-		$data   = $this->get_args_data( $renewal_price, 'usd', 'year' );
-		$price1 = $this->send_stripe_request( 'prices', $data, 'post' );
-		$price2 = $this->send_stripe_request( 'prices', $data, 'post' );
+		if ( empty( $renewal_price ) ) {
+			return $args;
+		}
 
-		unset( $body['items'] );
+        $plan1  = $args['items'][0] ?? '';
+        // $plan2  = $this->get_stripe_plan_id($sub, $prd, $renewal_price);
 
-		$body['phases'] = array(
+
+        $current_time = time();
+        $first_phase_end_date = $current_time + (365 * 24 * 60 * 60);		
+
+		unset( $args['items'] );
+		unset( $args['expand'] );
+		unset( $args['payment_behavior'] );
+		unset( $args['description'] );
+		unset( $args['payment_settings'] );
+
+		$args['start_date'] = $current_time;
+		$args['phases'] = array(
 			array(
-				'plans'    => array(
-					array(
-						'price'    => $price1,
-						'quantity' => 1,
-					),
+				'items'    => array(       
+					array(                 
+					'plan'    => $plan1,
+					'quantity' => 1,   
+					)                     
 				),
-				'end_date' => strtotime( '+1 year' ),
+				'end_date' => $first_phase_end_date,
 			),
 			array(
-				'plans' => array(
+				'items' => array(
 					array(
-						'price'    => $price2,
-						'quantity' => 1,
-					),
+					'plan'    => $plan1,
+					'quantity' => 1,     
+					),                   
 				),
+				'end_date' => null,
 			),
 		);
 
-        pretty_log( $args, 'args after' );
+		pretty_log( $args, 'modified args' );
 
 		return $args;
 	}
@@ -107,23 +70,13 @@ class Modify_Stripe_Subs extends MeprStripeGateway {
 
 		$renewal_price = get_post_meta( $product_id, 'mepr_tt_product_price', true );
 
-		if ( ! empty( $renewal_price ) && $endpoint == 'subscriptions' ) {
+		pretty_log( $renewal_price, 'renewal price' );
+
+		if ( ! empty( $renewal_price ) && $endpoint === 'subscriptions' ) {
 			$endpoint = 'subscription_schedules';
 		}
 
 		return $endpoint;
 	}
 
-	public function get_args_data( $amount = 1000, $currency = 'usd', $interval = 'year' ) {
-		$data = array(
-			'unit_amount'  => $amount,
-			'currency'     => $currency,
-			'recurring'    => array( 'interval' => $interval ),
-			'product_data' => array(
-				'name' => 'Annual Subscription',
-			),
-		);
-
-		return $data;
-	}
 }
