@@ -11,11 +11,22 @@ defined( 'ABSPATH' ) || exit;
  */
 class Meta_Fields {
 
-	public function __construct() {        
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 */
+	public function __construct() {
 		add_filter( 'mepr_view_get_string_/admin/products/form', array( $this, 'get_membership_terms' ) );
-        add_action( 'save_post', array( $this, 'save_tt_pricing_field' ) );
+		add_action( 'save_post', array( $this, 'save_tt_pricing_field' ) );
 	}
 
+	/**
+	 * Adds membership terms to the view.
+	 *
+	 * @param string $views The current view content.
+	 * @return string The modified view content.
+	 */
 	public function get_membership_terms( $views ) {
 
 		$tt_payment = get_post_meta( get_the_ID(), 'tt_payment', true );
@@ -42,9 +53,14 @@ class Meta_Fields {
 		return $views;
 	}
 
-    public function save_tt_pricing_field( $post_id ) {
+	/**
+	 * Saves the two-tier pricing field.
+	 *
+	 * @param int $post_id The ID of the post being saved.
+	 */
+	public function save_tt_pricing_field( $post_id ) {
 
-        if ( ! wp_verify_nonce( ( isset( $_POST[ 'mepr_products_nonce' ] ) ) ? $_POST[ 'mepr_products_nonce' ] : '', 'mepr_products_nonce' . wp_salt() ) ) {
+		if ( ! wp_verify_nonce( ( isset( $_POST['mepr_products_nonce'] ) ) ? $_POST['mepr_products_nonce'] : '', 'mepr_products_nonce' . wp_salt() ) ) {
 			return $post_id;
 		}
 
@@ -56,13 +72,13 @@ class Meta_Fields {
 			return;
 		}
 
-        $enable_tt_payment = ( isset( $_POST['tt_payment'] ) ) ? sanitize_text_field( $_POST['tt_payment'] ) : '';
+		$enable_tt_payment = ( isset( $_POST['tt_payment'] ) ) ? sanitize_text_field( $_POST['tt_payment'] ) : '';
 
-        $tt_recurring_price = ( isset( $_POST['mepr_tt_product_price'] ) ) ? sanitize_text_field( $_POST['mepr_tt_product_price'] ) : '';
+		$tt_recurring_price = ( isset( $_POST['mepr_tt_product_price'] ) ) ? sanitize_text_field( $_POST['mepr_tt_product_price'] ) : '';
 
-        $enable_tt_payment = ( $enable_tt_payment == 'on' ) ? true : false;
+		$enable_tt_payment = ( 'on' === $enable_tt_payment ) ? true : false;
 
-        update_post_meta( $post_id, 'tt_payment', $enable_tt_payment );
-        update_post_meta( $post_id, 'mepr_tt_product_price', $tt_recurring_price );        
-    } 
+		update_post_meta( $post_id, 'tt_payment', $enable_tt_payment );
+		update_post_meta( $post_id, 'mepr_tt_product_price', $tt_recurring_price );
+	}
 }

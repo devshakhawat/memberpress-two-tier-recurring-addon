@@ -18,6 +18,7 @@ class Modify_Stripe_Subs {
 			return $args;
 		}
 
+		pretty_log( $args, 'args' );
 
 		$product_id    = $args['metadata']['memberpress_product_id'] ?? '';
 		$renewal_price = get_post_meta( $product_id, 'mepr_tt_product_price', true );
@@ -66,13 +67,19 @@ class Modify_Stripe_Subs {
 		return $args;
 	}
 
+	/**
+	 * Modify the Stripe endpoint.
+	 *
+	 * @param string $endpoint   The original endpoint.
+	 * @param int    $product_id The product ID.
+	 *
+	 * @return string The modified endpoint.
+	 */
 	public function modify_stripe_endpoint( $endpoint, $product_id ) {
 
 		$renewal_price = get_post_meta( $product_id, 'mepr_tt_product_price', true );
 
-		pretty_log( $renewal_price, 'renewal price' );
-
-		if ( ! empty( $renewal_price ) && $endpoint === 'subscriptions' ) {
+		if ( ! empty( $renewal_price ) && 'subscriptions' === $endpoint ) {
 			$endpoint = 'subscription_schedules';
 		}
 

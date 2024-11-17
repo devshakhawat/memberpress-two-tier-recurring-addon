@@ -14,7 +14,7 @@
  * @package   Skt_Memberpress
  */
 
- /**
+/**
  * Protect direct access
  */
 if ( ! defined( 'ABSPATH' ) ) {
@@ -40,6 +40,6 @@ if ( ! defined( 'SKT_PLUGIN_URI' ) ) {
 /**
  * Load essential files
  */
-require_once SKT_PLUGIN_DIR . 'includes/functions.php';
+// require_once SKT_PLUGIN_DIR . 'includes/functions.php'; // phpcs:ignore
 require_once SKT_PLUGIN_DIR . 'includes/autoloader.php';
 require_once SKT_PLUGIN_DIR . 'includes/plugin.php';
