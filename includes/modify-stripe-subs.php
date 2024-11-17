@@ -31,7 +31,7 @@ class Modify_Stripe_Subs {
 	 */
 	public function modify_stripe_args( $args, $endpoint, $item2 ) {
 
-		if ( empty( $args['items'] || 'subscription_schedules' === $endpoint ) ) {
+		if ( empty( $args['items'] || 'subscription_schedules' !== $endpoint ) ) {
 			return $args;
 		}
 
