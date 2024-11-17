@@ -8,25 +8,18 @@ class Modify_Stripe_Subs {
 
 	public function __construct() {
 
-		// add_filter( 'mepr_stripe_subscription_args', array( $this, 'modify_stripe_args' ) );
+		add_filter( 'mepr_stripe_subs_args', array( $this, 'modify_stripe_args' ), 10, 3 );
 		add_filter( 'mepr_stripe_subscription_endpoint', array( $this, 'modify_stripe_endpoint' ), 10, 2 );
 	}
 
-	public function modify_stripe_args( $args, $renewal_plan ) {
+	public function modify_stripe_args( $args, $endpoint, $item2 ) {
 
-		if ( empty( $args['items'] || $args['metadata'] ) ) {
-			return $args;
-		}
-
-		$product_id    = $args['metadata']['memberpress_product_id'] ?? '';
-		$renewal_price = get_post_meta( $product_id, 'mepr_tt_product_price', true );
-
-		if ( empty( $renewal_price ) ) {
+		if ( empty( $args['items'] || 'subscription_schedules' === $endpoint ) ) {
 			return $args;
 		}
 
         $plan1  = $args['items'][0] ?? '';
-        // $plan2  = $this->get_stripe_plan_id($sub, $prd, $renewal_price);
+        $plan2  = $item2 ?? '';
 
 
         $current_time = time();
@@ -52,7 +45,7 @@ class Modify_Stripe_Subs {
 			array(
 				'items' => array(
 					array(
-					'plan'    => $plan1,
+					'plan'    => $plan2,
 					'quantity' => 1,     
 					),                   
 				),
