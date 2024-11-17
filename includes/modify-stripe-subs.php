@@ -67,7 +67,7 @@ class Modify_Stripe_Subs extends MeprStripeGateway {
 			return $args;
 		}
 
-        pretty_log($args, 'args');
+		pretty_log( $args, 'args' );
 
 		$product_id    = $args['metadata']['memberpress_product_id'];
 		$renewal_price = get_post_meta( $product_id, 'mepr_tt_product_price', true );
@@ -98,22 +98,39 @@ class Modify_Stripe_Subs extends MeprStripeGateway {
 			),
 		);
 
-        pretty_log( $args, 'args after' );
+		pretty_log( $args, 'args after' );
 
 		return $args;
 	}
 
+	/**
+	 * Modify the Stripe endpoint.
+	 *
+	 * @param string $endpoint   The original endpoint.
+	 * @param int    $product_id The product ID.
+	 *
+	 * @return string The modified endpoint.
+	 */
 	public function modify_stripe_endpoint( $endpoint, $product_id ) {
 
 		$renewal_price = get_post_meta( $product_id, 'mepr_tt_product_price', true );
 
-		if ( ! empty( $renewal_price ) && $endpoint == 'subscriptions' ) {
+		if ( ! empty( $renewal_price ) && 'subscriptions' === $endpoint ) {
 			$endpoint = 'subscription_schedules';
 		}
 
 		return $endpoint;
 	}
 
+	/**
+	 * Get arguments data for Stripe request.
+	 *
+	 * @param int    $amount   The amount in cents.
+	 * @param string $currency The currency code.
+	 * @param string $interval The interval for the subscription.
+	 *
+	 * @return array The data array for the Stripe request.
+	 */
 	public function get_args_data( $amount = 1000, $currency = 'usd', $interval = 'year' ) {
 		$data = array(
 			'unit_amount'  => $amount,

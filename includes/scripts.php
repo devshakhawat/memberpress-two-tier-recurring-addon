@@ -37,7 +37,6 @@ class Scripts {
 
 		// Scripts.
 		wp_enqueue_script( 'skt_admin', SKT_PLUGIN_URI . 'assets/admin/js/admin.min.js', array( 'jquery' ), SKT_VERSION, true );
-
 	}
 
 	/**
@@ -49,7 +48,5 @@ class Scripts {
 
 		wp_enqueue_style( 'skt_public', SKT_PLUGIN_URI . 'assets/public/css/public.min.css', array(), SKT_VERSION );
 		wp_enqueue_script( 'skt_public', SKT_PLUGIN_URI . 'assets/public/js/public.min.js', array( 'jquery' ), SKT_VERSION, true );
-
 	}
-
 }

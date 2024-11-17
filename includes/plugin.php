@@ -37,9 +37,7 @@ class Plugin {
 	 */
 	public function __construct() {
 
-		new Hooks();
 		new Scripts();
-		new Template_Loader();
 		new Meta_Fields();
 		new Manage_Columns();
 		new Modify_Stripe_Subs();
